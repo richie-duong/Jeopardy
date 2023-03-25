@@ -1,32 +1,56 @@
 import { useState, useEffect } from 'react'
+import axios from 'axios'
+import { useParams } from 'react-router-dom';
 
-import { TeamPoints } from '../components/TeamPoints';
+export const QuestionPage = () => {
 
-export const QuestionPage = ({value, question, choices, answer}) => {
+    const [questions, setQuestions] = useState({ answer: [], value: [], question: [] })
+    const [showAnswer, setShowAnswer] = useState(false)
+    const [winningTeam, setWinningTeam] = useState('')
 
-    const [ showAnswer, setShowAnswer ] = useState(false);
+    const { questionId } = useParams()
 
     useEffect(() => {
+        const getQuestion = async () => {
+            const response = await axios.get('http://localhost:8000/question/:questionId')
+            const questionData = response.data
+            setQuestions(questionData)
+        }
+        getQuestion()
+    }, [questionId])
 
-    },[showAnswer])
-
+    const updateGame = async () => {
+        await axios.post('http://localhost:8000/question/:questionId/update', {
+            teamName: winningTeam,
+            points: questions.value[questionId - 1]
+        }).then((redirect) => {window.location.replace('/scoreboard')})
+    }
 
 
     return (
-        <>
-            {!showAnswer ? 
-                (<h1>{question}</h1>) 
-                : (<h1>{answer}</h1>)
+        <div>
+            {!showAnswer ?
+                <>
+                    <h1>{questions.question[questionId - 1]}</h1>
+                    <button>Start Timer</button>
+                    <button onClick={() => setShowAnswer(true)}>REVEAL ANSWER</button>
+                </>
+                :
+                <>
+                    <h1>{questions.answer[questionId - 1]}</h1>
+                    <h3>Award points to:</h3>
+                    <label>
+                        <input type="radio" name="award" onChange={() => setWinningTeam('blue_points')} />
+                        Blue Team
+                    </label>
+                    <label>
+                        <input type="radio" name="award" onChange={() => setWinningTeam('red_points')} />
+                        Red Team
+                    </label>
+                    <button onClick={() => updateGame()}>Submit</button>
+                </>
             }
-            
-            {!showAnswer ? 
-                (<button onClick={setShowAnswer(true)}>Reveal Answer</button>)
-                : (<h3>Award Point To:</h3> +
-                    <button onClick={<TeamPoints earnedBluePoints={0} earnedRedPoints={0}/>}>Blue Team</button> +
-                    <button onclick={<TeamPoints earnedBluePoints={0} earnedRedPoints={0}/>}>Red Team</button> )
-            }
+        </div>
 
-            <TeamPoints />
-        </>
     )
 }

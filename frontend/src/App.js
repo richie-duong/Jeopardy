@@ -6,20 +6,22 @@ import { QuestionsBoardPage } from './pages/QuestionsBoardPage'
 import { QuestionPage } from './pages/QuestionPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { EditQuestionsPage } from './pages/EditQuestionsPage';
+import { ScoreboardPage } from './pages/ScoreboardPage';
 
 function App() {
   return (
-    <>
+    <div className='App'>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/questions" element={<QuestionsBoardPage />} />
-        <Route path="/questions/:questionRow/:questionId" element={<QuestionPage />} />
+        <Route path="/questions_board" element={<QuestionsBoardPage />} />
+        <Route path="/question/:questionId" element={<QuestionPage />} />
+        <Route path="/scoreboard" element={<ScoreboardPage />} />
         <Route path="/edit" element={<EditQuestionsPage />}/>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
-    </>
+    </div>
   )
 }
 
