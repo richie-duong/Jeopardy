@@ -1,5 +1,8 @@
 # Jeopardy
 
+![jeopardy](https://user-images.githubusercontent.com/105457925/231928346-7552dcff-970e-4185-915a-46037347f026.png)
+
+
 Demonstration link is coming soon! Once I deploy the application, this section will be updated.
 
 ## Description
